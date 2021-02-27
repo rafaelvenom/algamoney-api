@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://rafael-azevedo-algamoney.herokuapp.com'
+  apiUrl: 'https://algamoney-rafael.herokuapp.com/'
 };
