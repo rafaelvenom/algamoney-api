@@ -1,15 +1,15 @@
 <div class="container">
-  <form #pessoaForm="ngForm" autocomplete="off">
+
+  <form #pessoaForm="ngForm" autocomplete="off" (ngSubmit)="salvar(pessoaForm)">
     <div class="p-grid">
       <div class="p-col-12">
-        <h1>Nova Pessoa</h1>
+        <h1>{{ editando ? 'Edição de' : 'Nova'}} Pessoa</h1>
       </div>
 
       <div class="p-col-12 p-fluid">
         <label>Nome</label>
         <input pInputText type="text" name="nome"
-        ngModel #nome="ngModel" required minlength="5">
-
+        [(ngModel)]="pessoa.nome" #nome="ngModel" required minlength="5">
         <app-message [control]="nome" error="required"
           text="Informe o nome"></app-message>
         <app-message [control]="nome" error="minlength"
@@ -19,8 +19,7 @@
       <div class="p-col-12 p-md-9 p-fluid">
         <label>Logradouro</label>
         <input pInputText type="text" name="logradouro"
-        ngModel #logradouro="ngModel" required >
-
+        [(ngModel)]="pessoa.endereco.logradouro" #logradouro="ngModel" required >
         <app-message [control]="logradouro" error="required"
           text="Informe o logradouro"></app-message>
       </div>
@@ -28,22 +27,21 @@
       <div class="p-col-12 p-md-3 p-fluid">
         <label>Número</label>
         <input pInputText type="text" name="numero"
-        ngModel #numero="ngModel" required>
-
+        [(ngModel)]="pessoa.endereco.numero" #numero="ngModel" required>
         <app-message [control]="numero" error="required"
           text="Informe o número"></app-message>
       </div>
 
       <div class="p-col-12 p-md-4 p-fluid">
         <label>Complemento</label>
-        <input pInputText type="text">
+        <input pInputText type="text" name="complemento"
+        [(ngModel)]="pessoa.endereco.complemento">
       </div>
 
       <div class="p-col-12 p-md-4 p-fluid">
         <label>Bairro</label>
         <input pInputText type="text" name="bairro"
-        ngModel #bairro="ngModel" required>
-
+        [(ngModel)]="pessoa.endereco.bairro" #bairro="ngModel" required>
         <app-message [control]="bairro" error="required"
           text="Informe o bairro"></app-message>
       </div>
@@ -51,8 +49,7 @@
       <div class="p-col-12 p-md-4 p-fluid">
         <label>CEP</label>
         <p-inputMask mask="99.999-999" name="cep"
-        ngModel #cep="ngModel" required></p-inputMask>
-
+        [(ngModel)]="pessoa.endereco.cep" #cep="ngModel" required></p-inputMask>
         <app-message [control]="cep" error="required"
           text="Informe o CEP"></app-message>
       </div>
@@ -60,8 +57,7 @@
       <div class="p-col-12 p-md-6 p-fluid">
         <label>Cidade</label>
         <input pInputText type="text" name="cidade"
-        ngModel #cidade="ngModel" required>
-
+        [(ngModel)]="pessoa.endereco.cidade" #cidade="ngModel" required>
         <app-message [control]="cidade" error="required"
           text="Informe a Cidade"></app-message>
       </div>
@@ -69,17 +65,16 @@
       <div class="p-col-12 p-md-6 p-fluid">
         <label>Estado</label>
         <input pInputText type="text" name="estado"
-        ngModel #estado="ngModel" required>
-
-
+        [(ngModel)]="pessoa.endereco.estado" #estado="ngModel" required>
         <app-message [control]="estado" error="required"
           text="Informe o Estado"></app-message>
       </div>
 
       <div class="p-col-12 cadastro-acoes">
         <button pButton type="submit" label="Salvar" [disabled]="!pessoaForm.valid" ></button>
-        <button pButton type="button" label="Novo" class="p-button-info"></button>
-        <a href="javascript:;">Voltar para a pesquisa</a>
+        <button pButton type="button" label="Novo" class="p-button-info"
+        (click)="nova(pessoaForm)"></button>
+        <a routerLink="/pessoas">Voltar para a pesquisa</a>
       </div>
 
     </div>

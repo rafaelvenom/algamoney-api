@@ -5,6 +5,7 @@ body {
   color: #404C51;
 }
 
+
 a {
   text-decoration: none;
   color: #337ab7;
@@ -80,5 +81,7 @@ label {
   .cadastro-acoes .p-button {
     margin-right: 5px;
   }
+
+
 
 }

@@ -1,15 +1,16 @@
-import { LancamentoService } from './lancamentos/lancamento.service';
+import { SegurancaModule } from './seguranca/seguranca.module';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-
+import { CoreModule } from './core/core.module';
 import { PessoasModule } from './pessoas/pessoas.module';
 import { LancamentosModule } from './lancamentos/lancamentos.module';
-import { CoreModule } from './core/core.module';
 
+import { SegurancaRoutingModule } from './seguranca/seguranca-routing.module';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
@@ -22,10 +23,13 @@ import { CoreModule } from './core/core.module';
 
     CoreModule,
     LancamentosModule,
-    PessoasModule
+    PessoasModule,
+    SegurancaModule,
+    SegurancaRoutingModule,
+    AppRoutingModule
 
   ],
-  providers: [LancamentoService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

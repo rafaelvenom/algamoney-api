@@ -1,5 +1,14 @@
-import { LancamentoService } from './../lancamento.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+
+import { ErrorHandlerService } from './../../core/error-handler.service';
+
+import { LazyLoadEvent, MessageService, ConfirmationService } from 'primeng/api';
+import { AuthService } from './../../seguranca/auth.service';
+import { Table } from 'primeng/table';
+
+import { LancamentoService, LancamentoFiltro } from './../lancamento.service';
+import { Title } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-lancamentos-pesquisa',
@@ -8,18 +17,65 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LancamentosPesquisaComponent implements OnInit {
 
-  descricao: string;
+  totalRegistros = 0;
+  filtro = new LancamentoFiltro();
   lancamentos = [];
+  @ViewChild('tabela') grid: Table;
 
-  constructor(private lancamentoService: LancamentoService) { }
+  constructor(
+    private auth: AuthService,
+    private lancamentoService: LancamentoService,
+    private errorHandler: ErrorHandlerService,
+    private messageService: MessageService,
+    private confirmation: ConfirmationService,
+    private title: Title
+    ) { }
 
   ngOnInit() {
-    this.pesquisar();
+    this.title.setTitle('Pesquisa de lançamentos');
   }
 
-  pesquisar() {
-    this.lancamentoService.pesquisar({ descricao: this.descricao })
-      .then(lancamentos => this.lancamentos = lancamentos);
+  pesquisar(pagina = 0) {
+
+    this.filtro.pagina = pagina;
+
+    this.lancamentoService.pesquisar(this.filtro)
+      .then(resultado => {
+        this.totalRegistros = resultado.total;
+        this.lancamentos = resultado.lancamentos;
+      })
+      .catch(erro => this.errorHandler.handle(erro));
   }
+
+  aoMudarPagina(event: LazyLoadEvent){
+    const pagina = event.first / event.rows;
+    this.pesquisar(pagina);
+
+  }
+
+  confirmarExclusao(lancamento: any) {
+    this.confirmation.confirm({
+      message: `Tem certeza que deseja excluir o lançamento de ${lancamento.pessoa} - ${lancamento.descricao}`,
+      accept: () => {
+        this.excluir(lancamento);
+      }
+    });
+  }
+
+  excluir(lancamento: any) {
+      this.lancamentoService.excluir(lancamento.codigo)
+      .then(() => {
+        if (this.grid.first === 0) {
+          this.pesquisar();
+        } else {
+          this.grid.reset();
+        }
+
+        this.messageService.add({ severity: 'success', detail: 'Lançamento excluído com sucesso!' });
+      })
+      .catch(erro => this.errorHandler.handle(erro));
+  }
+
+
 
 }

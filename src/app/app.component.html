@@ -1,13 +1,12 @@
-<app-navbar></app-navbar>
-<app-lancamentos-pesquisa></app-lancamentos-pesquisa>
+<app-navbar *ngIf="exibindoNavbar()"></app-navbar>
+<router-outlet></router-outlet>
 
-
-<!--
-<app-lancamento-cadastro></app-lancamento-cadastro>
-<app-pessoas-pesquisa></app-pessoas-pesquisa>
-<app-pessoa-cadastro></app-pessoa-cadastro>
-
-
-  <app-lancamentos-pesquisa></app-lancamentos-pesquisa>
-
--->
+<p-toast></p-toast>
+<p-confirmDialog baseZIndex="9999" class="dialogo-confirma" header="Confirmação" icon="pi pi-question-circle" #confirmacao>
+  <p-footer>
+    <button type="button" pButton icon="pi pi-check" label="Sim"
+      (click)="confirmacao.accept()"></button>
+    <button type="button" pButton icon="pi pi-times" label="Não"
+      (click)="confirmacao.reject()"></button>
+  </p-footer>
+</p-confirmDialog>

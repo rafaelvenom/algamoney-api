@@ -1,35 +1,37 @@
 <div class="container">
 
-  <form #lancamentoForm="ngForm" autocomplete="off">
+  <form #f="ngForm" autocomplete="off" (ngSubmit)="salvar(f)">
     <div class="p-grid">
       <div class="p-col-12">
-        <h1>Novo Lançamento</h1>
+        <h1>{{ editando ? 'Edição de' : 'Novo' }} Lançamento</h1>
       </div>
 
       <div class="p-col-12">
-        <p-selectButton [options]="tipos" #tipo></p-selectButton>
+        <p-selectButton [options]="tipos" name="tipos"
+        [(ngModel)]="lancamento.tipo"
+        #tipo></p-selectButton>
       </div>
 
       <div class="p-col-6 p-md-3 p-fluid">
         <label>Vencimento</label>
         <p-calendar dateFormat="dd/mm/yy"
-        [inline]="false" [readonlyInput]="false" [showIcon]="false" name="dataVencimento"
-        ngModel #dataVencimento="ngModel" required></p-calendar>
-
-        <app-message [control]="dataVencimento" error="required"
+        [inline]="false" [readonlyInput]="false" [showIcon]="false" name="vencimento"
+        [(ngModel)]="lancamento.dataVencimento" #vencimento="ngModel" required></p-calendar>
+        <app-message [control]="vencimento" error="required"
           text="Informe uma data de vencimento"></app-message>
       </div>
 
       <div class="p-col-6 p-md-3 p-fluid">
         <label>{{tipo.value === 'RECEITA' ? 'Recebimento' : 'Pagamento'}}</label>
-        <p-calendar dateFormat="dd/mm/yy"></p-calendar>
+        <p-calendar dateFormat="dd/mm/yy" name="dataPagamento"
+        [(ngModel)]="lancamento.dataPagamento"></p-calendar>
       </div>
 
       <div class="p-col-12 p-md-9 p-fluid">
       <label>Descrição</label>
       <input pInputText type="text" name="descricao"
-        ngModel #descricao="ngModel" required minlength="5">
-
+        [(ngModel)]="lancamento.descricao"
+        #descricao="ngModel" required minlength="5">
         <app-message [control]="descricao" error="required"
           text="Informe a descrição"></app-message>
         <app-message [control]="descricao" error="minlength"
@@ -37,14 +39,11 @@
         </app-message>
       </div>
 
-
-
       <div class="p-col-12 p-md-3 p-fluid">
         <label>Valor</label>
         <p-inputNumber placeholder="0,00" mode="decimal" [min]="0" [minFractionDigits]="2" name="valor"
-        ngModel #valor="ngModel" required ></p-inputNumber>
+        [(ngModel)]="lancamento.valor" #valor="ngModel" required ></p-inputNumber>
         <!--<input pInputText type="text" placeholder="0,00">-->
-
         <app-message [control]="valor" error="required"
           text="Informe o valor"></app-message>
       </div>
@@ -52,9 +51,7 @@
       <div class="p-col-12 p-md-6 p-fluid">
         <label>Categoria</label>
         <p-dropdown [options]="categorias" placeholder="Selecione" showClear="true" name="categoria"
-        ngModel #categoria="ngModel" required ></p-dropdown>
-
-
+        [(ngModel)]="lancamento.categoria.codigo" #categoria="ngModel" required ></p-dropdown>
         <app-message [control]="categoria" error="required"
           text="Informe a categoria"></app-message>
       </div>
@@ -62,22 +59,22 @@
       <div class="p-col-12 p-md-6 p-fluid">
         <label>Pessoa</label>
         <p-dropdown [options]="pessoas" placeholder="Selecione" filter="true" showClear="true" emptyFilterMessage="Nenhum resultado" resetFilterOnHide="true" name="pessoa"
-        ngModel #pessoa="ngModel" required></p-dropdown>
-
-
+        [(ngModel)]="lancamento.pessoa.codigo" #pessoa="ngModel" required></p-dropdown>
         <app-message [control]="pessoa" error="required"
           text="Informe a pessoa"></app-message>
       </div>
 
       <div class="p-col-12 p-fluid">
         <label>Observação</label>
-        <textarea pInputTextarea rows="3"></textarea>
+        <textarea pInputTextarea rows="3" name="observacao"
+        [(ngModel)]="lancamento.observacao"></textarea>
       </div>
 
       <div class="p-col-12 cadastro-acoes">
-        <button pButton type="submit" label="Salvar" [disabled]="!lancamentoForm.valid"></button>
-        <button pButton type="button" label="Novo" class="p-button-info"></button>
-        <a href="javascript:;">Voltar para a pesquisa</a>
+        <button pButton type="submit" label="Salvar" [disabled]="!f.valid"></button>
+        <button pButton type="button" label="Novo" class="p-button-info"
+        (click)="novo(f)"></button>
+        <a routerLink="/lancamentos">Voltar para a pesquisa</a>
       </div>
 
     </div>
